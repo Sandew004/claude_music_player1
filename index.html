@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Glass Music</title>
+<style>
+:root{--h:210;--ease:cubic-bezier(.32,.72,0,1)}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+@media(hover:hover) and (pointer:fine){*{cursor:none!important}}
+html,body{height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter",system-ui,sans-serif;background:#05060a;color:#fff;overflow:hidden;-webkit-font-smoothing:antialiased}
+.bg{position:fixed;inset:0;overflow:hidden;z-index:0}
+.bg i{position:absolute;width:60vmax;height:60vmax;border-radius:50%;filter:blur(80px);opacity:.75;transition:background 1.2s;animation:drift 18s ease-in-out infinite alternate}
+.bg i:nth-child(1){background:hsl(var(--h) 90% 55%);left:-15vmax;top:-15vmax}
+.bg i:nth-child(2){background:hsl(calc(var(--h) + 70) 90% 55%);right:-20vmax;top:20vh;animation-delay:-6s}
+.bg i:nth-child(3){background:hsl(calc(var(--h) - 60) 90% 50%);left:10vw;bottom:-25vmax;animation-delay:-12s}
+@keyframes drift{to{transform:translate(8vmax,6vmax) scale(1.15)}}
+.glass{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.06));backdrop-filter:blur(28px) saturate(190%) brightness(1.08);-webkit-backdrop-filter:blur(28px) saturate(190%) brightness(1.08);border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.1),0 12px 40px rgba(0,0,0,.35)}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(120% 60% at 20% 0,rgba(255,255,255,.28),transparent 55%);pointer-events:none}
+main{position:relative;z-index:1;height:100%;overflow-y:auto;padding:calc(env(safe-area-inset-top) + 28px) 16px 180px;max-width:640px;margin:auto;scrollbar-width:none}
+main::-webkit-scrollbar{display:none}
+h1{font-size:34px;font-weight:800;letter-spacing:-.02em;margin:8px 4px 4px}
+.sub{opacity:.6;margin:0 4px 18px;font-size:15px}
+.list{border-radius:26px;padding:6px;overflow:hidden}
+.row{display:flex;align-items:center;gap:14px;padding:10px;border-radius:20px;transition:background .25s,transform .35s var(--ease)}
+.row:hover{background:rgba(255,255,255,.12)}
+.row:active{transform:scale(.97)}
+.row.on{background:rgba(255,255,255,.18)}
+.art{flex:none;width:52px;height:52px;border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 4px 12px rgba(0,0,0,.3)}
+.t{flex:1;min-width:0;font-weight:600;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t small{display:block;font-weight:400;opacity:.55;font-size:13px;margin-top:2px}
+.eq{display:none;gap:3px;align-items:end;height:16px}
+.row.on .eq{display:flex}
+.eq b{width:3px;background:#fff;border-radius:2px;animation:eq .8s ease-in-out infinite alternate}
+.eq b:nth-child(2){animation-delay:-.3s}.eq b:nth-child(3){animation-delay:-.6s}
+.paused .eq b{animation-play-state:paused}
+@keyframes eq{from{height:4px}to{height:16px}}
+.msg{padding:28px;text-align:center;opacity:.7}
+#mini{position:fixed;z-index:5;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 14px);max-width:616px;margin:auto;border-radius:34px;padding:10px 14px 10px 10px;display:flex;align-items:center;gap:12px;transition:transform .5s var(--ease),opacity .3s}
+#mini.hide{transform:translateY(140%);opacity:0;pointer-events:none}
+#mini .art{width:46px;height:46px}
+.ib{flex:none;width:44px;height:44px;border-radius:50%;border:0;color:#fff;background:rgba(255,255,255,.14);display:grid;place-items:center;transition:transform .3s var(--ease),background .2s}
+.ib:hover{background:rgba(255,255,255,.26)}.ib:active{transform:scale(.88)}
+.ib svg{width:22px;height:22px;fill:#fff}
+#sheet{position:fixed;z-index:10;inset:0;display:flex;flex-direction:column;align-items:center;padding:calc(env(safe-area-inset-top) + 16px) 28px calc(env(safe-area-inset-bottom) + 28px);background:rgba(10,12,20,.35);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);transform:translateY(100%);transition:transform .6s var(--ease)}
+#sheet.open{transform:none}
+.grab{width:40px;height:5px;border-radius:3px;background:rgba(255,255,255,.4);margin-bottom:22px}
+#big{width:min(78vw,380px,42vh);aspect-ratio:1;border-radius:26px;margin:auto 0 24px;transition:transform .7s var(--ease);box-shadow:inset 0 2px 0 rgba(255,255,255,.5),0 30px 70px rgba(0,0,0,.5)}
+.paused #big{transform:scale(.84)}
+#ttl{font-size:24px;font-weight:700;text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar{width:min(100%,420px);margin:22px 0 6px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:4px;background:linear-gradient(90deg,#fff var(--p,0%),rgba(255,255,255,.25) var(--p,0%));outline:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:0;height:0}
+.times{display:flex;justify-content:space-between;font-size:12px;opacity:.6;width:min(100%,420px)}
+.ctrl{display:flex;gap:26px;align-items:center;margin:18px 0 auto}
+.ctrl .ib{width:64px;height:64px}.ctrl .ib.p{width:84px;height:84px}.ctrl svg{width:30px;height:30px}.ctrl .p svg{width:38px;height:38px}
+#orb{position:fixed;z-index:9999;left:0;top:0;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.95),rgba(255,255,255,.25) 28%,rgba(255,255,255,.08) 60%);backdrop-filter:blur(3px) saturate(220%) brightness(1.25);-webkit-backdrop-filter:blur(3px) saturate(220%) brightness(1.25);border:1px solid rgba(255,255,255,.7);box-shadow:inset -2px -3px 5px rgba(255,255,255,.35),0 4px 14px rgba(0,0,0,.35);transition:width .35s var(--ease),height .35s var(--ease),margin .35s var(--ease),background .3s;will-change:transform}
+#orb.hov{width:44px;height:44px;margin:-22px 0 0 -22px}
+#orb.down{width:13px;height:13px;margin:-6.5px 0 0 -6.5px;transition-duration:.12s}
+#orb.ctx{width:34px;height:34px;margin:-17px 0 0 -17px;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.9),rgba(130,190,255,.45) 40%,rgba(255,255,255,.08) 70%)}
+#orb.busy{animation:pulse 1s ease-in-out infinite}
+#orb.busy::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:2.5px solid transparent;border-top-color:#fff;border-right-color:rgba(255,255,255,.4);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{50%{opacity:.6}}
+.rip{position:fixed;z-index:9998;border-radius:50%;pointer-events:none;border:1.5px solid rgba(255,255,255,.8);background:radial-gradient(circle,rgba(255,255,255,.3),transparent 70%);backdrop-filter:blur(2px);transform:translate(-50%,-50%) scale(.2);animation:rip .7s var(--ease) forwards}
+.rip.r{border-color:rgba(140,200,255,.9);animation-duration:.9s;border-width:3px}
+@keyframes rip{to{transform:translate(-50%,-50%) scale(1);opacity:0}}
+#menu{position:fixed;z-index:9990;min-width:190px;padding:6px;border-radius:20px;display:none;transform-origin:top left;animation:pop .35s var(--ease)}
+#menu button{display:block;width:100%;text-align:left;background:none;border:0;color:#fff;font:inherit;font-size:15px;padding:11px 14px;border-radius:14px}
+#menu button:hover{background:rgba(255,255,255,.18)}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01s!important}}
+@media(hover:none){#orb{display:none}}
+</style></head><body>
+<div class="bg"><i></i><i></i><i></i></div>
+<main><h1>Library</h1><p class="sub" id="count">Loading…</p><div class="list glass" id="list"></div></main>
+
+<div id="mini" class="glass hide"><div class="art" id="mArt"></div><div class="t" id="mT" style="flex:1"></div>
+<button class="ib" id="mPlay" aria-label="Play/Pause"></button><button class="ib" id="mNext" aria-label="Next"></button></div>
+
+<div id="sheet"><div class="grab" id="grab"></div><div class="art" id="big"></div><div id="ttl"></div>
+<div class="bar"><input type="range" id="seek" min="0" max="1000" value="0"></div>
+<div class="times"><span id="cur">0:00</span><span id="dur">0:00</span></div>
+<div class="ctrl"><button class="ib" id="prev" aria-label="Previous"></button><button class="ib p" id="play" aria-label="Play/Pause"></button><button class="ib" id="next" aria-label="Next"></button></div></div>
+
+<div id="menu" class="glass"><button data-a="play">Play</button><button data-a="next">Play next</button><button data-a="refresh">Refresh library</button></div>
+<div id="orb"></div><audio id="au" preload="metadata"></audio>
+
+<script>
+const $=s=>document.querySelector(s),au=$('#au'),orb=$('#orb'),list=$('#list');
+const I={play:'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',pause:'<svg viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>',next:'<svg viewBox="0 0 24 24"><path d="M6 6l9 6-9 6zM16 6h2.5v12H16z"/></svg>',prev:'<svg viewBox="0 0 24 24"><path d="M18 6l-9 6 9 6zM5.5 6H8v12H5.5z"/></svg>'};
+$('#prev').innerHTML=I.prev;$('#next').innerHTML=I.next;$('#mNext').innerHTML=I.next;
+let songs=[],cur=-1,ctxIdx=-1,queueNext=-1;
+const hue=n=>[...n].reduce((a,c)=>a*31+c.charCodeAt(0)|0,7)%360;
+const grad=n=>{const h=Math.abs(hue(n));return`linear-gradient(135deg,hsl(${h} 85% 62%),hsl(${(h+60)%360} 80% 45%))`};
+const fmt=s=>isFinite(s)?Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0'):'0:00';
+const busy=v=>orb.classList.toggle('busy',v);
+
+async function load(){
+  busy(true);$('#count').textContent='Loading…';
+  try{
+    const r=await fetch('/api/songs');if(!r.ok)throw 0;songs=await r.json();
+    $('#count').textContent=songs.length+' songs';
+    list.innerHTML=songs.length?songs.map((s,i)=>`<div class="row" data-i="${i}"><div class="art" style="background:${grad(s.name)}"></div><div class="t">${s.name.replace(/</g,'&lt;')}<small>Google Drive</small></div><div class="eq"><b></b><b></b><b></b></div></div>`).join(''):'<div class="msg">No songs yet. Add MP3 files to your Drive folder.</div>';
+  }catch(e){$('#count').textContent='Offline';list.innerHTML='<div class="msg">Could not load songs. Check your Netlify environment variables.</div>'}
+  busy(false);
+}
+function play(i){
+  if(i<0||i>=songs.length)return;cur=i;const s=songs[i];
+  busy(true);au.src='/api/stream/'+s.id;au.play().catch(()=>{});
+  document.documentElement.style.setProperty('--h',Math.abs(hue(s.name)));
+  $('#mT').textContent=$('#ttl').textContent=s.name;
+  $('#mArt').style.background=$('#big').style.background=grad(s.name);
+  $('#mini').classList.remove('hide');
+  document.querySelectorAll('.row').forEach((r,k)=>r.classList.toggle('on',k===i));
+  if('mediaSession'in navigator)navigator.mediaSession.metadata=new MediaMetadata({title:s.name,artist:'Glass Music'});
+}
+const nxt=()=>{if(queueNext>=0){const q=queueNext;queueNext=-1;play(q)}else play((cur+1)%songs.length)};
+const prv=()=>play((cur-1+songs.length)%songs.length);
+const tog=()=>cur<0?play(0):au.paused?au.play():au.pause();
+list.onclick=e=>{const r=e.target.closest('.row');if(r)play(+r.dataset.i)};
+$('#play').onclick=$('#mPlay').onclick=e=>{e.stopPropagation();tog()};
+$('#next').onclick=$('#mNext').onclick=e=>{e.stopPropagation();nxt()};$('#prev').onclick=prv;
+$('#mini').onclick=()=>$('#sheet').classList.add('open');
+$('#grab').onclick=()=>$('#sheet').classList.remove('open');
+au.onplay=au.onpause=()=>{const p=au.paused;document.body.classList.toggle('paused',p);$('#play').innerHTML=$('#mPlay').innerHTML=p?I.play:I.pause};
+au.onwaiting=au.onloadstart=()=>busy(true);au.oncanplay=au.onplaying=()=>busy(false);au.onerror=()=>busy(false);au.onended=nxt;
+au.ontimeupdate=()=>{const p=au.duration?au.currentTime/au.duration*1000:0;$('#seek').value=p;$('#seek').style.setProperty('--p',p/10+'%');$('#cur').textContent=fmt(au.currentTime);$('#dur').textContent=fmt(au.duration)};
+$('#seek').oninput=e=>{if(au.duration)au.currentTime=e.target.value/1000*au.duration};
+au.onpause();
+if('mediaSession'in navigator){navigator.mediaSession.setActionHandler('nexttrack',nxt);navigator.mediaSession.setActionHandler('previoustrack',prv)}
+
+/* Glass-ball cursor */
+let mx=innerWidth/2,my=innerHeight/2,x=mx,y=my,sx=1,sy=1;
+addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;orb.classList.toggle('hov',!!e.target.closest('.row,.ib,button,input,.grab,#mini'))});
+(function loop(){const dx=mx-x,dy=my-y;x+=dx*.28;y+=dy*.28;
+  const v=Math.min(Math.hypot(dx,dy)/40,.5),a=Math.atan2(dy,dx)*180/Math.PI; // liquid stretch toward motion
+  orb.style.transform=`translate(${x}px,${y}px) rotate(${a}deg) scale(${1+v},${1-v*.5})`;requestAnimationFrame(loop)})();
+function ripple(cx,cy,r){const d=document.createElement('div');d.className='rip'+(r?' r':'');const s=r?120:90;d.style.cssText=`left:${cx}px;top:${cy}px;width:${s}px;height:${s}px`;document.body.append(d);setTimeout(()=>d.remove(),950)}
+addEventListener('pointerdown',e=>{if(e.button===0){orb.classList.add('down');ripple(e.clientX,e.clientY)}});
+addEventListener('pointerup',()=>orb.classList.remove('down'));
+addEventListener('contextmenu',e=>{e.preventDefault();orb.classList.add('ctx');setTimeout(()=>orb.classList.remove('ctx'),500);ripple(e.clientX,e.clientY,1);
+  const row=e.target.closest('.row');ctxIdx=row?+row.dataset.i:-1;const m=$('#menu');
+  m.style.display='block';m.style.left=Math.min(e.clientX,innerWidth-210)+'px';m.style.top=Math.min(e.clientY,innerHeight-170)+'px';
+  m.querySelectorAll('[data-a=play],[data-a=next]').forEach(b=>b.style.display=row?'block':'none');
+  m.style.animation='none';m.offsetHeight;m.style.animation=''});
+addEventListener('click',()=>$('#menu').style.display='none',true);
+$('#menu').onclick=e=>{const a=e.target.dataset.a;if(a==='play')play(ctxIdx);if(a==='next')queueNext=ctxIdx;if(a==='refresh')load()};
+document.addEventListener('mouseleave',()=>orb.style.opacity=0);document.addEventListener('mouseenter',()=>orb.style.opacity=1);
+load();
+</script></body></html>

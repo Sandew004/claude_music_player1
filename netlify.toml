@@ -1,0 +1,13 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/songs"
+  to = "/.netlify/functions/songs"
+  status = 200
+
+[[redirects]]
+  from = "/api/stream/:id"
+  to = "/.netlify/functions/stream?id=:id"
+  status = 200
