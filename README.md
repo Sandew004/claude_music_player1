@@ -28,6 +28,5 @@ Songs are listed newest first. Titles come from file names.
 Private folders would need a Google service account instead of an API key (ask if you want that version).
 Drive limits heavy public downloads; for a personal player this is fine.
 
-https://drive.google.com/drive/folders/1cSZq6GYz0gBytkAVPHHuRwE5lM6Giz28?usp=sharing
 
-1cSZq6GYz0gBytkAVPHHuRwE5lM6Giz28
+
