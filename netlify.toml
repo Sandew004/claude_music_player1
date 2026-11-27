@@ -7,7 +7,7 @@
   to = "/.netlify/functions/songs"
   status = 200
 
-[[redirects]]
-  from = "/api/stream/:id"
-  to = "/.netlify/functions/stream?id=:id"
-  status = 200
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
