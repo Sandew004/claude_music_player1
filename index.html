@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Glass Music">
 <meta name="theme-color" content="#03040a"><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icon-192.png"><link rel="apple-touch-icon" href="/icon-192.png">
 <title>Glass Music</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -126,7 +126,7 @@ h1{font-size:34px;font-weight:800;letter-spacing:-.025em;text-shadow:0 0 28px va
 
 /* mini + mobile */
 #mini{display:none}
-@media(max-width:860px){
+@media(max-width:860px),(pointer:coarse) and (max-height:520px){
  .app{grid-template-columns:1fr;padding:calc(env(safe-area-inset-top) + 8px) 10px 0}
  .lib{height:100%;padding-bottom:96px}
  .player{position:fixed;inset:0;z-index:20;border-radius:0;background:rgba(10,12,22,.66);transform:translateY(104%);transition:transform .65s var(--ease);animation:none}
@@ -159,6 +159,57 @@ h1{font-size:34px;font-weight:800;letter-spacing:-.025em;text-shadow:0 0 28px va
 @keyframes rip{to{transform:translate(-50%,-50%) scale(1);opacity:0}}
 @media(hover:none){#orb{display:none}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01s!important}}
+
+/* ===== mobile ===== */
+html,body{overscroll-behavior:none}
+body{touch-action:manipulation;-webkit-touch-callout:none}
+.grip,.mr,.mprog{display:none}
+#scrim{position:fixed;inset:0;z-index:9980;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s}
+#scrim.on{opacity:1;pointer-events:auto}
+@keyframes sheetUp{from{transform:translateY(40px);opacity:0}}
+@media(hover:none){
+ .fv{opacity:.8;width:40px;height:40px}
+ .mr{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;opacity:.8}
+ .mr svg{width:20px;height:20px}
+ .row:hover{background:none}
+ .ib:hover{transform:none}.ib:active{transform:scale(.88)}
+ .ib:not(.on):not(.play):hover{background:rgba(255,255,255,.1)}
+ .rng{height:10px}.rng::-webkit-slider-thumb{width:18px;height:18px}
+}
+@media(max-width:860px),(pointer:coarse) and (max-height:520px){
+ .glass{backdrop-filter:blur(18px) saturate(180%) brightness(.92);-webkit-backdrop-filter:blur(18px) saturate(180%) brightness(.92)}
+ .app{display:block;padding:0;height:100%;height:100dvh}
+ .app .lib{height:100%;padding:calc(env(safe-area-inset-top) + 10px) 0 0;background:none;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;border-radius:0;animation:none}
+ .lib::before,.lib::after{display:none}
+ .hd{padding:0 14px 0 18px}h1{font-size:36px}
+ #count{padding:2px 18px 12px}
+ .search{margin:0 14px 12px;height:46px;border-radius:16px}.search input{font-size:16px}
+ .list{margin-top:0;padding:4px 8px calc(env(safe-area-inset-bottom) + 172px)}
+ .row{padding:8px 6px 8px 10px;gap:14px}
+ .art{width:56px;height:56px;border-radius:14px}
+ .t b{font-size:17px}.t small{font-size:14px}
+ .seg{position:fixed;z-index:12;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 12px);margin:0;padding:5px;border-radius:30px;background:rgba(18,20,34,.62);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 14px 40px rgba(0,0,0,.5),0 0 40px -18px var(--c1);transition:transform .55s var(--ease),opacity .3s}
+ .seg .thumb{top:5px;bottom:5px;left:5px;width:calc((100% - 10px)/3);border-radius:25px;background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.08));box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 0 20px -4px var(--c1)}
+ .seg button{padding:15px 0;font-size:15px}
+ body.pv .seg{transform:translateY(160%);opacity:0;pointer-events:none}
+ #mini{bottom:calc(env(safe-area-inset-bottom) + 82px);padding:9px 12px 14px 9px}
+ #mini .art{width:48px;height:48px;border-radius:12px}
+ .mprog{display:block;position:absolute;left:24px;right:24px;bottom:6px;height:3px;border-radius:2px;background:rgba(255,255,255,.14);overflow:hidden;pointer-events:none}
+ .mprog::after{content:"";position:absolute;inset:0;width:var(--mp,0%);background:linear-gradient(90deg,var(--c1),var(--c2));box-shadow:0 0 10px var(--c1)}
+ .player{top:0;height:100%;height:100dvh;border-radius:34px 34px 0 0;background:rgba(8,10,22,.8);overflow-y:auto;justify-content:safe center;padding:calc(env(safe-area-inset-top) + 56px) 24px calc(env(safe-area-inset-bottom) + 24px);visibility:hidden;backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);transition:transform .65s var(--ease),visibility 0s linear .65s}
+ body.pv .player{visibility:visible;transition:transform .65s var(--ease),visibility 0s}
+ .grip{display:block;position:absolute;top:calc(env(safe-area-inset-top) + 10px);left:50%;width:42px;height:5px;margin-left:-21px;border-radius:3px;background:rgba(255,255,255,.35)}
+ .back{top:calc(env(safe-area-inset-top) + 18px);left:14px}
+ .ib.sm{width:44px;height:44px}
+ .wrap{width:min(80vw,40vh);width:min(80vw,40dvh);margin-bottom:22px}
+ .seekrow{margin:22px 0 4px}
+ .ctrl{gap:14px;margin:10px 0}.ctrl .ib{width:56px;height:56px}.ctrl .play{width:80px;height:80px}
+ .opts{gap:12px}.volrow{width:min(100%,320px)}
+ #toast{bottom:calc(env(safe-area-inset-bottom) + 160px)}
+ #menu{left:10px!important;right:10px!important;top:auto!important;bottom:calc(env(safe-area-inset-bottom) + 10px);min-width:0;border-radius:28px;padding:8px;animation:sheetUp .45s var(--ease)!important}
+ #menu button{padding:16px 18px;font-size:17px}
+}
+@media(orientation:landscape) and (max-height:520px){.wrap{width:min(34vh,190px)!important;margin-bottom:10px}.meta h2{font-size:20px}.seekrow{margin-top:12px}.ctrl{margin:4px 0}.opts{margin:2px 0 8px}}
 </style></head><body>
 <svg width="0" height="0" style="position:absolute"><filter id="lg" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".006 .01" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="34" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 <div class="bg"><i></i><i></i><i></i><u class="strip s1"></u><u class="strip s2"></u><u class="strip s3"></u><u class="strip s4"></u></div>
@@ -173,7 +224,7 @@ h1{font-size:34px;font-weight:800;letter-spacing:-.025em;text-shadow:0 0 28px va
  </aside>
 
  <section class="player glass">
-  <button class="ib sm back" id="back" aria-label="Close player"></button><button class="ib sm popb" id="pop" aria-label="Pop-out mini player" title="Pop-out mini player (O)"></button>
+  <div class="grip"></div><button class="ib sm back" id="back" aria-label="Close player"></button><button class="ib sm popb" id="pop" aria-label="Pop-out mini player" title="Pop-out mini player (O)"></button>
   <div class="wrap"><div id="big"></div></div>
   <div class="meta"><h2 id="ttl">Nothing playing</h2><p id="sub">Pick a song from your library</p></div>
   <div class="seekrow"><span id="cur">0:00</span><input class="rng" id="seek" type="range" min="0" max="1000" value="0" aria-label="Seek"><span id="dur">-0:00</span></div>
@@ -183,13 +234,13 @@ h1{font-size:34px;font-weight:800;letter-spacing:-.025em;text-shadow:0 0 28px va
  </section>
 </div>
 
-<div id="mini" class="glass hide"><div class="art" id="mArt"></div><div class="mt"><b id="mT"></b><small id="mA"></small></div><button class="ib sm" id="mPlay" aria-label="Play or pause"></button><button class="ib sm" id="mNext" aria-label="Next"></button></div>
+<div id="mini" class="glass hide"><div class="art" id="mArt"></div><div class="mt"><b id="mT"></b><small id="mA"></small></div><button class="ib sm" id="mPlay" aria-label="Play or pause"></button><button class="ib sm" id="mNext" aria-label="Next"></button><i class="mprog"></i></div>
 <div id="menu" class="glass"><button data-a="play">Play</button><button data-a="pnext">Play next</button><button data-a="queue">Add to queue</button><button data-a="fav">Favorite</button><button data-a="refresh">Refresh library</button></div>
-<div id="toast" class="glass"></div><div id="orb"></div><audio id="au" preload="metadata"></audio>
+<div id="scrim"></div><div id="toast" class="glass"></div><div id="orb"></div><audio id="au" preload="metadata"></audio>
 
 <script>
 const $=s=>document.querySelector(s),au=$('#au'),orb=$('#orb'),list=$('#list'),seek=$('#seek'),vol=$('#vol');
-if(navigator.userAgentData?.brands?.some(b=>/Chromium/.test(b.brand)))document.documentElement.classList.add('refract');
+if(matchMedia('(hover:hover) and (pointer:fine)').matches&&navigator.userAgentData?.brands?.some(b=>/Chromium/.test(b.brand)))document.documentElement.classList.add('refract');
 const ST='fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"';
 const ic=b=>`<svg viewBox="0 0 24 24">${b}</svg>`;
 const NX='<path d="M5 6.2v11.6a.9.9 0 0 0 1.4.75l8.3-5.8a.9.9 0 0 0 0-1.5L6.4 5.45A.9.9 0 0 0 5 6.2z"/><rect x="16.5" y="5" width="2.6" height="14" rx="1.2"/>';
@@ -199,6 +250,7 @@ const SP='<path d="M4 9.5v5h3.5l4.5 4v-13l-4.5 4z"/>';
 const heart=f=>ic(`<path ${f?ST.replace('fill="none"','fill="currentColor"'):ST} d="M12 19.5s-7.2-4.4-7.2-9.6a4.2 4.2 0 0 1 7.2-2.9 4.2 4.2 0 0 1 7.2 2.9c0 5.2-7.2 9.6-7.2 9.6z"/>`);
 const I={
  pop:ic(`<rect ${ST} x="3" y="5" width="18" height="14" rx="3.5"/><rect x="12" y="11" width="7" height="5.5" rx="1.6"/>`),
+ dots:ic(`<circle cx="5.5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="18.5" cy="12" r="1.8"/>`),
  dl:ic(`<path ${ST} d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19.5h14"/>`),
  play:ic('<path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/>'),
  pause:ic('<rect x="6" y="5" width="4.2" height="14" rx="1.4"/><rect x="13.8" y="5" width="4.2" height="14" rx="1.4"/>'),
@@ -232,6 +284,7 @@ function loadArt(s,i){const im=new Image();im.alt='';im.decoding='async';
   $('#mArt').style.background=`url("${artUrl(s,240)}") center/cover`;$('#mArt').innerHTML='';
   const h=dominantHue(im);if(h!=null)setHue(h);setMeta(s,new URL(artUrl(s,512),location.href).href);syncMini()};
  im.src=artUrl(s,900)}
+const hap=(n=8)=>{try{navigator.vibrate&&navigator.vibrate(n)}catch{}};
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2600)}
 
 let mini=null,curHue=265,songs=[],cur=-1,order=[],pos=0,uq=[],tab='all',failed=false,sleepT=0,sleepI=0,ctxIdx=-1;
@@ -269,7 +322,7 @@ function buildOrder(){
   if(cur>=0){order=order.filter(i=>i!==cur);order.unshift(cur)}}
  pos=Math.max(0,order.indexOf(cur));
 }
-const row=(i,k)=>{const s=songs[i],f=favs.has(s.id);return`<div class="row${i===cur?' on':''}" data-i="${i}" style="--d:${Math.min(k,14)*28}ms"><div class="art" style="background:${grad(s.name)}">${I.note}${s.art?`<img loading="lazy" decoding="async" alt="" src="${artUrl(s,240)}" onerror="this.remove()">`:''}</div><div class="t"><b>${esc(s.title)}</b><small>${esc(s.artist)}</small></div><div class="eq"><i></i><i></i><i></i></div><button class="fv${f?' on':''}" data-f="${i}" aria-label="Favorite">${heart(f)}</button></div>`};
+const row=(i,k)=>{const s=songs[i],f=favs.has(s.id);return`<div class="row${i===cur?' on':''}" data-i="${i}" style="--d:${Math.min(k,14)*28}ms"><div class="art" style="background:${grad(s.name)}">${I.note}${s.art?`<img loading="lazy" decoding="async" alt="" src="${artUrl(s,240)}" onerror="this.remove()">`:''}</div><div class="t"><b>${esc(s.title)}</b><small>${esc(s.artist)}</small></div><div class="eq"><i></i><i></i><i></i></div><button class="fv${f?' on':''}" data-f="${i}" aria-label="Favorite">${heart(f)}</button><button class="mr" data-m="${i}" aria-label="More">${I.dots}</button></div>`};
 function render(anim){
  const q=$('#q').value.trim().toLowerCase();let idx;
  if(tab==='queue')idx=cur<0?[]:[...uq,...order.slice(pos+1,pos+31)];
@@ -300,9 +353,9 @@ function next(auto){
  play(order[p]);
 }
 const prev=()=>{if(!songs.length)return;if(au.currentTime>3){au.currentTime=0;return}play(order[(pos-1+order.length)%order.length])};
-const tog=()=>cur<0?play(order[0]??0):au.paused?au.play():au.pause();
+const tog=()=>{hap();return cur<0?play(order[0]??0):au.paused?au.play():au.pause()};
 const skip=d=>{if(au.duration)au.currentTime=Math.min(au.duration,Math.max(0,au.currentTime+d))};
-function toggleFav(i){if(i<0||!songs[i])return;const id=songs[i].id;favs.has(id)?favs.delete(id):favs.add(id);store.set('fav',[...favs]);
+function toggleFav(i){if(i<0||!songs[i])return;hap(6);const id=songs[i].id;favs.has(id)?favs.delete(id):favs.add(id);store.set('fav',[...favs]);
  document.querySelectorAll('.fv').forEach(b=>{const f=favs.has(songs[+b.dataset.f].id);b.classList.toggle('on',f);b.innerHTML=heart(f)});icons();if(tab==='fav')render()}
 
 au.onplay=au.onpause=()=>{document.body.classList.toggle('paused',au.paused);icons();if('mediaSession'in navigator)navigator.mediaSession.playbackState=au.paused?'paused':'playing'};
@@ -312,7 +365,7 @@ au.onerror=()=>{busy(false);
  toast('Could not play this file. Check the stream function in Netlify.')};
 let drag=false,lastT='';
 (function tick(){if(!au.paused&&!drag&&au.duration)setProg(au.currentTime/au.duration);requestAnimationFrame(tick)})();
-function setProg(f){if(mini){const k=mini.q('#p-seek');if(k&&!mini.drag){k.value=f*1000;k.style.setProperty('--p',f*100+'%');mini.q('#p-c').textContent=fmt(au.currentTime);mini.q('#p-d').textContent='-'+fmt(au.duration-au.currentTime)}}seek.value=f*1000;seek.style.setProperty('--p',f*100+'%');const t=fmt(au.currentTime);if(t!==lastT){lastT=t;$('#cur').textContent=t;$('#dur').textContent='-'+fmt(au.duration-au.currentTime)}}
+function setProg(f){$('#mini').style.setProperty('--mp',f*100+'%');if(mini){const k=mini.q('#p-seek');if(k&&!mini.drag){k.value=f*1000;k.style.setProperty('--p',f*100+'%');mini.q('#p-c').textContent=fmt(au.currentTime);mini.q('#p-d').textContent='-'+fmt(au.duration-au.currentTime)}}seek.value=f*1000;seek.style.setProperty('--p',f*100+'%');const t=fmt(au.currentTime);if(t!==lastT){lastT=t;$('#cur').textContent=t;$('#dur').textContent='-'+fmt(au.duration-au.currentTime)}}
 seek.oninput=()=>{drag=true;if(au.duration){const f=seek.value/1000;seek.style.setProperty('--p',f*100+'%');$('#cur').textContent=fmt(f*au.duration)}};
 seek.onchange=()=>{if(au.duration)au.currentTime=seek.value/1000*au.duration;drag=false};
 vol.oninput=()=>{au.muted=false;setVol(vol.value/100)};
@@ -320,7 +373,7 @@ const mute=()=>{au.muted=!au.muted;icons()};
 
 /* controls */
 $('#play').onclick=$('#mPlay').onclick=e=>{e.stopPropagation();tog()};
-$('#next').onclick=$('#mNext').onclick=e=>{e.stopPropagation();next()};
+$('#next').onclick=$('#mNext').onclick=e=>{e.stopPropagation();hap();next()};
 $('#prev').onclick=prev;$('#b10').onclick=()=>skip(-10);$('#f10').onclick=()=>skip(10);$('#mute').onclick=mute;
 const toggleShuffle=()=>{shuffle=!shuffle;store.set('sh',shuffle);buildOrder();icons();if(tab==='queue')render();toast(shuffle?'Shuffle on':'Shuffle off')};
 const cycleRep=()=>{rep=(rep+1)%3;store.set('rep',rep);icons();toast(['Repeat off','Repeat all','Repeat one'][rep])};
@@ -338,7 +391,7 @@ $('#q').oninput=()=>{if(tab==='queue')return;render()};
 $('#seg').onclick=e=>{const b=e.target.closest('button');if(!b)return;tab=b.dataset.t;
  document.querySelectorAll('#seg button').forEach(x=>x.classList.toggle('on',x===b));
  $('#seg').style.setProperty('--i',['all','fav','queue'].indexOf(tab));render(true)};
-list.onclick=e=>{const f=e.target.closest('.fv');if(f)return toggleFav(+f.dataset.f);
+list.onclick=e=>{const f=e.target.closest('.fv');if(f)return toggleFav(+f.dataset.f);const mr=e.target.closest('.mr');if(mr){ctxIdx=+mr.dataset.m;const b=mr.getBoundingClientRect();return showMenu(b.left,b.bottom,true)}
  const r=e.target.closest('.row');if(r){const i=+r.dataset.i;uq=uq.filter(x=>x!==i);play(i)}};
 addEventListener('click',e=>{const b=e.target.closest('button');if(b)b.blur()});
 
@@ -350,12 +403,15 @@ addEventListener('keydown',e=>{
 if('mediaSession'in navigator){const M=navigator.mediaSession;[['play',()=>au.play()],['pause',()=>au.pause()],['nexttrack',()=>next()],['previoustrack',prev],['seekbackward',()=>skip(-10)],['seekforward',()=>skip(10)]].forEach(([a,f])=>{try{M.setActionHandler(a,f)}catch{}})}
 
 /* context menu */
+const MQ='(max-width:860px),(pointer:coarse) and (max-height:520px)',mobile=()=>matchMedia(MQ).matches;
+function showMenu(x,y,hasRow){const m=$('#menu');
+ m.querySelectorAll('[data-a=play],[data-a=pnext],[data-a=queue],[data-a=fav]').forEach(b=>b.style.display=hasRow?'block':'none');
+ m.style.display='block';m.style.left=Math.min(x,innerWidth-220)+'px';m.style.top=Math.min(y,innerHeight-230)+'px';
+ m.style.animation='none';m.offsetHeight;m.style.animation='';if(mobile())$('#scrim').classList.add('on')}
+function hideMenu(){$('#menu').style.display='none';$('#scrim').classList.remove('on')}
 addEventListener('contextmenu',e=>{e.preventDefault();orb.classList.add('ctx');setTimeout(()=>orb.classList.remove('ctx'),500);ripple(e.clientX,e.clientY,1);
- const r=e.target.closest('.row');ctxIdx=r?+r.dataset.i:-1;const m=$('#menu');
- m.querySelectorAll('[data-a=play],[data-a=pnext],[data-a=queue],[data-a=fav]').forEach(b=>b.style.display=r?'block':'none');
- m.style.display='block';m.style.left=Math.min(e.clientX,innerWidth-220)+'px';m.style.top=Math.min(e.clientY,innerHeight-230)+'px';
- m.style.animation='none';m.offsetHeight;m.style.animation=''});
-addEventListener('click',()=>$('#menu').style.display='none',true);
+ const r=e.target.closest('.row');ctxIdx=r?+r.dataset.i:-1;showMenu(e.clientX,e.clientY,!!r)});
+addEventListener('click',hideMenu,true);
 $('#menu').onclick=e=>{const a=e.target.dataset.a,i=ctxIdx;
  if(a==='play')play(i);if(a==='pnext'){uq.unshift(i);toast('Playing next');if(tab==='queue')render()}
  if(a==='queue'){uq.push(i);toast('Added to queue');if(tab==='queue')render()}
@@ -415,6 +471,18 @@ async function openMini(){
  w.addEventListener('pagehide',()=>{if(mini===m)mini=null;$('#pop').classList.remove('on')});
  $('#pop').classList.add('on');syncMini();if(au.duration)setProg(au.currentTime/au.duration);
 }
+
+/* touch gestures */
+function swipe(el,h){let sx=0,sy=0;el.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY},{passive:true});
+ el.addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy,ax=Math.abs(dx),ay=Math.abs(dy);
+  if(ax>ay*1.5&&ax>55)(dx<0?h.left:h.right)?.();else if(ay>ax*1.5&&ay>60)(dy<0?h.up:h.down)?.()},{passive:true})}
+swipe($('.wrap'),{left:()=>{hap();next()},right:()=>{hap();prev()}});
+swipe($('#mini'),{left:()=>{hap();next()},right:()=>{hap();prev()},up:()=>document.body.classList.add('pv')});
+(function(){const p=$('.player');let y0=0,x0=0,dy=0,on=false,lock=0;
+ p.addEventListener('touchstart',e=>{if(!mobile()||p.scrollTop>0||e.target.closest('input'))return;const t=e.touches[0];y0=t.clientY;x0=t.clientX;dy=0;on=true;lock=0},{passive:true});
+ p.addEventListener('touchmove',e=>{if(!on)return;const t=e.touches[0];dy=t.clientY-y0;if(!lock)lock=Math.abs(dy)>Math.abs(t.clientX-x0)?1:2;if(lock===1&&dy>0){p.style.transition='none';p.style.transform=`translateY(${dy}px)`}},{passive:true});
+ p.addEventListener('touchend',()=>{if(!on)return;on=false;p.style.transition='';p.style.transform='';if(lock===1&&dy>120)document.body.classList.remove('pv')},{passive:true})})();
+if(/iphone|ipad/i.test(navigator.userAgent)&&!navigator.standalone&&!store.get('iosTip',false))setTimeout(()=>{toast('Tip: tap Share, then Add to Home Screen, for a full-screen app');clearTimeout(toast.t);toast.t=setTimeout(()=>$('#toast').classList.remove('on'),6000);store.set('iosTip',true)},5000);
 
 setVol(store.get('vol',.8));au.defaultPlaybackRate=speed;au.onpause();load(true);
 </script></body></html>
